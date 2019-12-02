@@ -1,24 +1,40 @@
 import React, { useState } from "react";
 
 function InputSample() {
-  const [text, setText] = useState("");
-  //   useState는 상태의 기본값을 파라미터로 사용 첫번째 원소는 현재상태, 두번째 원소는 setter
-
+  const [inputs, setInputs] = useState({
+    name: "",
+    nickname: ""
+  });
+  const { name, nickname } = inputs;
+  //   비구조 할당을 통해 값추출
   const onChange = e => {
-    //   이벤트 객체 e 를 파라미터로 받아와 사용
-    setText(e.target.value);
+    const { value, name } = e.target;
+    // e.target에서 value, name 추출
+    setInputs({
+      ...inputs, //inputs객체복사
+      [name]: value //name을 value로 설정
+    });
   };
-  const onReset = e => {
-    setText("");
+  const onReset = () => {
+    setInputs({
+      name: "",
+      nickname: ""
+    });
   };
 
   return (
     <div>
-      <input onChange={onChange} value={text} />
-      {/* value값을 넣어주어야 초기화했을때 input도 같이 초기화 */}
+      <input name="name" placeholder="이름" onChange={onChange} value={name} />
+      <input
+        name="nickname"
+        placeholder="닉네임"
+        onChange={onChange}
+        value={nickname}
+      />
       <button onClick={onReset}>초기화</button>
       <div>
-        <b>값: {text}</b>
+        <b>값: </b>
+        {name} ({nickname})
       </div>
     </div>
   );
