@@ -5,12 +5,7 @@ function Wrapper({ children }) {
     border: "2px solid black",
     padding: "16px"
   };
-  return (
-    <div style={style}>
-      {children}
-      {/* 내부의 내용을 보이기위해서는 사용해야한다 */}
-    </div>
-  );
+  return <div style={style}>{children}</div>;
 }
 
 export default Wrapper;
