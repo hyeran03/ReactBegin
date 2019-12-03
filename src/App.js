@@ -76,8 +76,6 @@ function App() {
         user.id === id ? { ...user, active: !user.active } : user
       )
     );
-    // 불변성을 지키면서 배열안의 원소를 업데이트 => map
-    // 특정 객체를 업데이트 할때도 기존을 유지하면서 새로운 자료를 덮어씌우며 업데이트
   };
 
   return (
