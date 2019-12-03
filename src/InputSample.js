@@ -6,8 +6,6 @@ function InputSample() {
     nickname: ""
   });
   const nameInput = useRef();
-  //useRef 를 사용하여 DOM을 선택할수있다
-  //변수 관리에도 사용한다
   const { name, nickname } = inputs;
   const onChange = e => {
     const { value, name } = e.target;
@@ -22,7 +20,6 @@ function InputSample() {
       nickname: ""
     });
     nameInput.current.focus();
-    // 객체.돔가리키기.돔API
   };
 
   return (
