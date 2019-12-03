@@ -1,11 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
 import "./App.css";
 
+function countActiveUsers(users) {
+  console.log("활성 사용자 수를 세는중...");
+  return users.filter(user => user.active).length;
+}
+
 function App() {
   const [inputs, setInputs] = useState({
-    uername: "",
+    username: "",
     email: ""
   });
 
@@ -78,6 +83,11 @@ function App() {
     );
   };
 
+  //활성화 수 세기
+  const count = useMemo(() => countActiveUsers(users), [users]);
+  //  [값이 바뀌어야만 연산을 해주겠다] 바뀔때만 연산이되고 그렇지 않다면 그대로 []값을 넣어야만 연산이 된다
+  //useMemo를 사용하면 연산이 필요할때만 사용할 수 있도록 해준다
+
   return (
     <>
       <CreateUser
@@ -87,6 +97,7 @@ function App() {
         onCreate={onCreate}
       />
       <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
+      <div>활성 사용자 수: {count} </div>
     </>
   );
 }
