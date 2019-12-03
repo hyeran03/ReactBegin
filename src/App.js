@@ -39,8 +39,6 @@ function App() {
     }
   ]);
 
-  // 배열의 불변성을 지키면서 새로운 항목추가
-  // 스프레드(spread) 연산자 사용
 
   const nextId = useRef(5);
 
@@ -50,9 +48,7 @@ function App() {
       username,
       email
     };
-    setUsers([...users, user]); //기존의 배열을 가져와 user에 넣고 user에 새항목을 추가시킨다
-    // setUsers(users.concat(user)); -> concat 함수를 사용하여 항목을 추가하는 방법
-    //push를 사용하면 안된다
+    setUsers([...users, user]); 
     setInputs({
       username: "",
       email: ""
@@ -60,6 +56,11 @@ function App() {
     console.log(nextId.current);
     nextId.current += 1;
   };
+
+  const onRemove = id =>{
+    setUsers(users.filter(user => user.id !== id));
+    // filter를 사용해 값을 비교하고 비교값과 맞다면(true) 적용한다
+  }
 
   return (
     <>
@@ -69,7 +70,7 @@ function App() {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} />
+      <UserList users={users} onRemove={onRemove}/>
     </>
   );
 }
