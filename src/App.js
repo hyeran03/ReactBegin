@@ -8,7 +8,9 @@ function App() {
     uername: "",
     email: ""
   });
+
   const { username, email } = inputs;
+
   const onChange = e => {
     const { name, value } = e.target;
     setInputs({
@@ -16,51 +18,67 @@ function App() {
       [name]: value
     });
   };
+
   const [users, setUsers] = useState([
     {
       id: 1,
       username: "one",
-      email: "one@example.com"
+      email: "one@example.com",
+      active: true
     },
     {
       id: 2,
       username: "two",
-      email: "two@example.com"
+      email: "two@example.com",
+      active: false
     },
     {
       id: 3,
       username: "three",
-      email: "three@example.com"
+      email: "three@example.com",
+      active: false
     },
     {
       id: 4,
       username: "four",
-      email: "four@example.com"
+      email: "four@example.com",
+      active: false
     }
   ]);
 
-
   const nextId = useRef(5);
 
+  //배열의 값 수정 - ...users(spread), concat(user)
   const onCreate = () => {
     const user = {
       id: nextId.current,
       username,
       email
     };
-    setUsers([...users, user]); 
+    setUsers([...users, user]);
+    // setUsers(users.concat(user));
     setInputs({
       username: "",
       email: ""
     });
-    console.log(nextId.current);
     nextId.current += 1;
   };
 
-  const onRemove = id =>{
+  //배열의 값 없애기(제거) - filter
+  const onRemove = id => {
     setUsers(users.filter(user => user.id !== id));
-    // filter를 사용해 값을 비교하고 비교값과 맞다면(true) 적용한다
-  }
+  };
+
+  //특정값 업데이트 - map
+  const onToggle = id => {
+    setUsers(
+      users.map(user =>
+        user.id === id ? { ...user, active: !user.active } : user
+      )
+    );
+    // 불변성을 지키면서 배열안의 원소를 업데이트 => map
+    // 특정 객체를 업데이트 할때도 기존을 유지하면서 새로운 자료를 덮어씌우며 업데이트
+  };
 
   return (
     <>
@@ -70,7 +88,7 @@ function App() {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} onRemove={onRemove}/>
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
     </>
   );
 }
