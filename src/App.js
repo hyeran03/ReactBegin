@@ -1,10 +1,9 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useCallback } from "react";
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
 import "./App.css";
 
 function countActiveUsers(users) {
-  console.log("활성 사용자 수를 세는중...");
   return users.filter(user => user.active).length;
 }
 
@@ -16,13 +15,17 @@ function App() {
 
   const { username, email } = inputs;
 
-  const onChange = e => {
-    const { name, value } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value
-    });
-  };
+  const onChange = useCallback(
+    // useCallback 을 사용하여 함수를 재사용한다
+    e => {
+      const { name, value } = e.target;
+      setInputs({
+        ...inputs,
+        [name]: value
+      });
+    },
+    [inputs]
+  );
 
   const [users, setUsers] = useState([
     {
@@ -53,40 +56,40 @@ function App() {
 
   const nextId = useRef(5);
 
-  //배열의 값 수정 - ...users(spread), concat(user)
-  const onCreate = () => {
+  const onCreate = useCallback(() => {
     const user = {
       id: nextId.current,
       username,
       email
     };
     setUsers([...users, user]);
-    // setUsers(users.concat(user));
     setInputs({
       username: "",
       email: ""
     });
     nextId.current += 1;
-  };
+  }, [username, email, users]);
+  // []의 값을 넣어주어야만 최신의 상태를 참조한다
 
-  //배열의 값 없애기(제거) - filter
-  const onRemove = id => {
-    setUsers(users.filter(user => user.id !== id));
-  };
+  const onRemove = useCallback(
+    id => {
+      setUsers(users.filter(user => user.id !== id));
+    },
+    [users]
+  );
 
-  //특정값 업데이트 - map
-  const onToggle = id => {
-    setUsers(
-      users.map(user =>
-        user.id === id ? { ...user, active: !user.active } : user
-      )
-    );
-  };
+  const onToggle = useCallback(
+    id => {
+      setUsers(
+        users.map(user =>
+          user.id === id ? { ...user, active: !user.active } : user
+        )
+      );
+    },
+    [users]
+  );
 
-  //활성화 수 세기
   const count = useMemo(() => countActiveUsers(users), [users]);
-  //  [값이 바뀌어야만 연산을 해주겠다] 바뀔때만 연산이되고 그렇지 않다면 그대로 []값을 넣어야만 연산이 된다
-  //useMemo를 사용하면 연산이 필요할때만 사용할 수 있도록 해준다
 
   return (
     <>
