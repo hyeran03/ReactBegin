@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 function InputSample() {
   const [inputs, setInputs] = useState({
     name: "",
     nickname: ""
   });
+  const nameInput = useRef();
+  //useRef 를 사용하여 DOM을 선택할수있다
+  //변수 관리에도 사용한다
   const { name, nickname } = inputs;
-  //   비구조 할당을 통해 값추출
   const onChange = e => {
     const { value, name } = e.target;
-    // e.target에서 value, name 추출
     setInputs({
-      ...inputs, //inputs객체복사
-      [name]: value //name을 value로 설정
+      ...inputs,
+      [name]: value
     });
   };
   const onReset = () => {
@@ -20,11 +21,19 @@ function InputSample() {
       name: "",
       nickname: ""
     });
+    nameInput.current.focus();
+    // 객체.돔가리키기.돔API
   };
 
   return (
     <div>
-      <input name="name" placeholder="이름" onChange={onChange} value={name} />
+      <input
+        name="name"
+        placeholder="이름"
+        onChange={onChange}
+        value={name}
+        ref={nameInput}
+      />
       <input
         name="nickname"
         placeholder="닉네임"
