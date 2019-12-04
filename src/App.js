@@ -16,7 +16,6 @@ function App() {
   const { username, email } = inputs;
 
   const onChange = useCallback(
-    // useCallback 을 사용하여 함수를 재사용한다
     e => {
       const { name, value } = e.target;
       setInputs({
@@ -62,32 +61,26 @@ function App() {
       username,
       email
     };
-    setUsers([...users, user]);
+    // setUsers([...users, user]);
+    setUsers(users => users.concat(user));
     setInputs({
       username: "",
       email: ""
     });
     nextId.current += 1;
-  }, [username, email, users]);
-  // []의 값을 넣어주어야만 최신의 상태를 참조한다
+  }, [username, email]);
 
-  const onRemove = useCallback(
-    id => {
-      setUsers(users.filter(user => user.id !== id));
-    },
-    [users]
-  );
+  const onRemove = useCallback(id => {
+    setUsers(users => users.filter(user => user.id !== id));
+  }, []);
 
-  const onToggle = useCallback(
-    id => {
-      setUsers(
-        users.map(user =>
-          user.id === id ? { ...user, active: !user.active } : user
-        )
-      );
-    },
-    [users]
-  );
+  const onToggle = useCallback(id => {
+    setUsers(users =>
+      users.map(user =>
+        user.id === id ? { ...user, active: !user.active } : user
+      )
+    );
+  }, []);
 
   const count = useMemo(() => countActiveUsers(users), [users]);
 
@@ -106,3 +99,8 @@ function App() {
 }
 
 export default App;
+
+// useMemo - 연산된 값 재사용
+// useCallback - 특정 함수 재사용
+// React.memo - 컴포넌트(렌더링된 결과물)을 재사용
+//-> 무조건적으로 성능이 좋아진다는 것은 아니다, 최적화 할 수 있을때만 사용하는 것이 좋다
