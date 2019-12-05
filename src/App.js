@@ -1,4 +1,10 @@
-import React, { useRef, useCallback, useReducer, useMemo } from "react";
+import React, {
+  useRef,
+  useCallback,
+  useReducer,
+  useMemo,
+  createContext
+} from "react";
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
 import useInputs from "./useInputs_reducer";
@@ -62,6 +68,9 @@ function reducer(state, action) {
   }
 }
 
+//onToggle과 onRemove를 직접적으로 전해주기 - reducer을 사용하면 편리하게 context를 사용할수잇다
+export const UserDispatch = createContext(null);
+
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -69,7 +78,6 @@ function App() {
     username: "",
     email: ""
   });
-  // useInput에서 내보낸 배열의 순서와 맞춘다(이름을 맞출필요는 없다)
   const { username, email } = form;
 
   const nextId = useRef(5);
@@ -89,33 +97,19 @@ function App() {
     reset();
   }, [username, email, reset]);
 
-  const onToggle = useCallback(id => {
-    dispatch({
-      type: "TOGGLE_USER",
-      id
-    });
-  }, []);
-
-  const onRemove = useCallback(id => {
-    dispatch({
-      type: "REMOVE_USER",
-      id
-    });
-  }, []);
-
   const count = useMemo(() => conuntActiveUsers(users), [users]);
 
   return (
-    <>
+    <UserDispatch.Provider value={dispatch}>
       <CreateUser
         username={username}
         email={email}
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} onToggle={onToggle} onRemove={onRemove} />
+      <UserList users={users} />
       <div>활성사용자 수 : {count}</div>
-    </>
+    </UserDispatch.Provider>
   );
 }
 
