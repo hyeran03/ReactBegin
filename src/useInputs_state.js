@@ -1,4 +1,4 @@
-// useInputs 커스텀 Hook
+// useInputs 커스텀 Hook - state
 
 import { useState, useCallback } from "react";
 

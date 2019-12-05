@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useReducer, useMemo } from "react";
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
-import useInputs from "./useInputs";
+import useInputs from "./useInputs_reducer";
 import "./App.css";
 
 function conuntActiveUsers(users) {
