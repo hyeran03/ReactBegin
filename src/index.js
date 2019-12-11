@@ -5,8 +5,10 @@ import App from "./App";
 // import CounterReducer from "./CounterReducer";
 import * as serviceWorker from "./serviceWorker";
 // import ContextSample from "./ContextSample";
+import Hello from "./Hello";
+import Counter from "./Counter";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<Counter />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
