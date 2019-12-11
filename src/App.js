@@ -1,13 +1,6 @@
-import React, {
-  useRef,
-  useCallback,
-  useReducer,
-  useMemo,
-  createContext
-} from "react";
+import React, { useReducer, useMemo, createContext } from "react";
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
-import useInputs from "./useInputs_reducer";
 import "./App.css";
 
 function conuntActiveUsers(users) {
@@ -68,45 +61,41 @@ function reducer(state, action) {
   }
 }
 
-//onToggle과 onRemove를 직접적으로 전해주기 - reducer을 사용하면 편리하게 context를 사용할수잇다
+//CrateUser 컴포넌트에서 dispatch 직접 구현
 export const UserDispatch = createContext(null);
+// export const UserDispatch = React.createContext(null); - import 하지 않았을 경우
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const [form, onChange, reset] = useInputs({
-    username: "",
-    email: ""
-  });
-  const { username, email } = form;
+  // const [form, onChange, reset] = useInputs({
+  //   username: "",
+  //   email: ""
+  // });
+  // const { username, email } = form;
 
-  const nextId = useRef(5);
+  // const nextId = useRef(5);
 
   const { users } = state;
 
-  const onCreate = useCallback(() => {
-    dispatch({
-      type: "CREATE_USER",
-      user: {
-        id: nextId.current,
-        username,
-        email
-      }
-    });
-    nextId.current += 1;
-    reset();
-  }, [username, email, reset]);
+  // const onCreate = useCallback(() => {
+  //   dispatch({
+  //     type: "CREATE_USER",
+  //     user: {
+  //       id: nextId.current,
+  //       username,
+  //       email
+  //     }
+  //   });
+  //   nextId.current += 1;
+  //   reset();
+  // }, [username, email, reset]);
 
   const count = useMemo(() => conuntActiveUsers(users), [users]);
 
   return (
     <UserDispatch.Provider value={dispatch}>
-      <CreateUser
-        username={username}
-        email={email}
-        onChange={onChange}
-        onCreate={onCreate}
-      />
+      <CreateUser />
       <UserList users={users} />
       <div>활성사용자 수 : {count}</div>
     </UserDispatch.Provider>
