@@ -38,7 +38,6 @@ const initialState = {
   ]
 };
 
-//immer를 사용하면 불변성을 지키기 쉬워지나 복잡해지기도 하니 잘 판단해서 사용하길
 function reducer(state, action) {
   switch (action.type) {
     case "CREATE_USER":
